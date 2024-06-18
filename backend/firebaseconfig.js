@@ -1,5 +1,5 @@
 import { initializeApp, getApps } from 'firebase/app';
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, signInWithEmailAndPassword } from 'firebase/auth';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -26,6 +26,17 @@ const signInWithGoogle = () => {
     });
 };
 
+const signInWithEmail = (email, password) => {
+  return signInWithEmailAndPassword(auth, email, password)
+    .then((result) => {
+      return result.user; // Retorna el usuario
+    })
+    .catch((error) => {
+      console.error(error);
+      throw error; // Lanza el error para que pueda ser capturado en el .catch() del componente
+    });
+};
+
 const signOutUser = () => {
   return signOut(auth)
     .then(() => {
@@ -37,4 +48,4 @@ const signOutUser = () => {
     });
 };
 
-export { signInWithGoogle, signOutUser };
+export { signInWithGoogle, signInWithEmail, signOutUser };
