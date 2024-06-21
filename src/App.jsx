@@ -1,6 +1,4 @@
-// App.jsx
-
-import React, { useState, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Layout from './components/Layouts/LayoutComponent.jsx';
 import HomeScreen from './screens/HomeScreen.jsx';
@@ -13,31 +11,20 @@ import { UserContext } from '../backend/config/UserContext.jsx'; // Importa el c
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
-  const [user, setUser] = useState(null); // Estado de sesión de usuario
-
-  useEffect(() => {
-    // Verificar la sesión al cargar la aplicación
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-  }, []);
+  const { user } = useContext(UserContext); // Utiliza el contexto de usuario
 
   return (
     <Router>
-      <UserContext.Provider value={{ user, setUser }}>
-        <Layout>
-          <Routes>
-            <Route path="/" element={<HomeScreen />} />
-            <Route path="/About" element={<AboutScreen />} />
-            <Route path="/Service" element={<ServiceScreen />} />
-            <Route path="/Forum" element={<ForumScreen />} />
-            <Route path="/Contact" element={<ContactScreen />} />
-          </Routes>
-        </Layout>
-        {/* Mostrar el modal de inicio de sesión solo cuando no hay sesión activa */}
-        {!user && <LoginModalComponent />}
-      </UserContext.Provider>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<HomeScreen />} />
+          <Route path="/About" element={<AboutScreen />} />
+          <Route path="/Service" element={<ServiceScreen />} />
+          <Route path="/Forum" element={<ForumScreen />} />
+          <Route path="/Contact" element={<ContactScreen />} />
+        </Routes>
+      </Layout>
+      {!user && <LoginModalComponent />}
     </Router>
   );
 }
