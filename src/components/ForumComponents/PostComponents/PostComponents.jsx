@@ -26,7 +26,7 @@ const Post = ({ title, body, imageUrl, createdAt, author }) => {
             <a className="text-muted ml-1" href="">Zona Norte</a>
           </div>
         </div>
-        <a>Publicado por Transporitista </a>
+        <a>Publicado por Transportista </a>
         <h4 className="font-weight-bold mb-3">{title}</h4>
         <p>{body}</p>
       </div>
