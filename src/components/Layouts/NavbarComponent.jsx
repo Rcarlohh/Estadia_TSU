@@ -1,12 +1,8 @@
-import React, {useState} from 'react';
-import { NavLink } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { NavLink, Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {  faTruck, faPhoneAlt, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { faFacebookF, faTwitter } from '@fortawesome/free-brands-svg-icons';
-import { faSignInAlt, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
-import { faTruck } from '@fortawesome/free-solid-svg-icons';
-import { faPhoneAlt } from '@fortawesome/free-solid-svg-icons';
-import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -20,6 +16,7 @@ const Navbar = () => {
     // Aquí puedes manejar la lógica de cierre de sesión
     setIsLoggedIn(false);
   };
+
   return (
     <div>
       <div className="container-fluid bg-dark">
@@ -38,24 +35,16 @@ const Navbar = () => {
             </div>
           </div>
           <div className="col-lg-6 text-center text-lg-right">
-      <div className="d-inline-flex align-items-center">
-        <a className="text-white px-2" href="https://facebook.com">
-          <FontAwesomeIcon icon={faFacebookF} />
-        </a>
-        <a className="text-white px-2" href="https://twitter.com">
-          <FontAwesomeIcon icon={faTwitter} />
-        </a>
-        {isLoggedIn ? (
-          <button className="text-black px-2" onClick={handleLogout}>
-            <FontAwesomeIcon icon={faSignOutAlt} /> Cerrar Sesión
-          </button>
-        ) : (
-          <Link className="text-white px-2" to="/Forum" onClick={handleLogin}>
-            <FontAwesomeIcon icon={faSignInAlt} /> Iniciar Sesión
-          </Link>
-        )}
-      </div>
-    </div>
+            <div className="d-inline-flex align-items-center">
+              <a className="text-white px-2" href="https://facebook.com">
+                <FontAwesomeIcon icon={faFacebookF} />
+              </a>
+              <a className="text-white px-2" href="https://twitter.com">
+                <FontAwesomeIcon icon={faTwitter} />
+              </a>
+          
+            </div>
+          </div>
         </div>
       </div>
       <nav className="navbar navbar-expand-lg bg-light navbar-light py-0 py-lg-0 px-lg-3">

@@ -59,7 +59,7 @@ const ForumScreen = () => {
       {isCreatePostModalOpen && (
         <div className="modal-overlay">
           <div className="modal-content">
-            <button className="close-button" onClick={handleCloseCreatePostModal}>Cerrar</button>
+            <button className="close-button" onClick={handleCloseCreatePostModal}>X</button>
             <CreatePostModal onClose={handlePostPublish} />
           </div>
         </div>

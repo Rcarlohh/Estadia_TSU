@@ -1,22 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import Post from './PostComponents.jsx';
-import { getFirestore, collection, onSnapshot } from 'firebase/firestore';
+import { getFirestore, collection, onSnapshot, query, orderBy } from 'firebase/firestore';
 
 const SearchComponent = () => {
   const [posts, setPosts] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [recentPosts, setRecentPosts] = useState([]);
+  const [tags] = useState(['Zona Norte', 'Zona Sur', 'Zona Sureste', 'Zona Bajio', 'Zona Centro', 'Zona Occidental']);
   const db = getFirestore();
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(collection(db, 'posts'), (snapshot) => {
+    const q = query(collection(db, 'posts'), orderBy('createdAt', 'desc'));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
       const postsData = snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
       }));
       setPosts(postsData);
+      setRecentPosts(postsData.slice(0, 5));
     });
 
     return () => unsubscribe();
   }, [db]);
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const filteredPosts = posts.filter(post => 
+    post.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    post.body.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="container py-5">
@@ -27,7 +41,7 @@ const SearchComponent = () => {
               Destacados 
             </div>
           </h2>
-          {posts.map(post => (
+          {filteredPosts.map(post => (
             <Post 
               key={post.id}
               title={post.title}
@@ -35,6 +49,7 @@ const SearchComponent = () => {
               imageUrl={post.imageUrl}
               createdAt={post.createdAt}
               author={post.author}
+              zone={post.zone}
             />
           ))}
         </div>
@@ -42,7 +57,13 @@ const SearchComponent = () => {
           <div className="mb-5">
             <div className="bg-secondary" style={{ padding: '30px' }}>
               <div className="input-group">
-                <input type="text" className="form-control border-0 p-4" placeholder="" />
+                <input 
+                  type="text" 
+                  className="form-control border-0 p-4" 
+                  placeholder="Buscar..." 
+                  value={searchTerm}
+                  onChange={handleSearchChange}
+                />
                 <div className="input-group-append">
                   <span className="input-group-text bg-primary border-primary text-white">
                     <i className="fa fa-search"></i>
@@ -52,7 +73,7 @@ const SearchComponent = () => {
             </div>
           </div>
           <div className="mb-5">
-            <h3 className="mb-4">Categorias</h3>
+            <h3 className="mb-4">Categorías</h3>
             <div className="bg-secondary" style={{ padding: '30px' }}>
               <ul className="list-inline m-0">
                 <li className="mb-1 py-2 px-3 bg-light d-flex justify-content-between align-items-center">
@@ -89,47 +110,22 @@ const SearchComponent = () => {
             </div>
           </div>
           <div className="mb-5">
-            <h3 className="mb-4">Post Recientes</h3>
-            <div className="d-flex mb-3">
-              <img className="img-fluid" src="img/blog-1.jpg" style={{ width: '80px', height: '80px', objectFit: 'cover' }} alt="" />
-              <a href="" className="d-flex align-items-center bg-secondary text-dark text-decoration-none px-3" style={{ height: '80px' }}>
-                Lorem ipsum dolor sit amet consec adipis elit
-              </a>
-            </div>
-            <div className="d-flex mb-3">
-              <img className="img-fluid" src="img/blog-2.jpg" style={{ width: '80px', height: '80px', objectFit: 'cover' }} alt="" />
-              <a href="" className="d-flex align-items-center bg-secondary text-dark text-decoration-none px-3" style={{ height: '80px' }}>
-                Lorem ipsum dolor sit amet consec adipis elit
-              </a>
-            </div>
-            <div className="d-flex mb-3">
-              <img className="img-fluid" src="img/blog-1.jpg" style={{ width: '80px', height: '80px', objectFit: 'cover' }} alt="" />
-              <a href="" className="d-flex align-items-center bg-secondary text-dark text-decoration-none px-3" style={{ height: '80px' }}>
-                Lorem ipsum dolor sit amet consec adipis elit
-              </a>
-            </div>
-            <div className="d-flex mb-3">
-              <img className="img-fluid" src="img/blog-2.jpg" style={{ width: '80px', height: '80px', objectFit: 'cover' }} alt="" />
-              <a href="" className="d-flex align-items-center bg-secondary text-dark text-decoration-none px-3" style={{ height: '80px' }}>
-                Lorem ipsum dolor sit amet consec adipis elit
-              </a>
-            </div>
-            <div className="d-flex mb-3">
-              <img className="img-fluid" src="img/blog-1.jpg" style={{ width: '80px', height: '80px', objectFit: 'cover' }} alt="" />
-              <a href="" className="d-flex align-items-center bg-secondary text-dark text-decoration-none px-3" style={{ height: '80px' }}>
-                Lorem ipsum dolor sit amet consec adipis elit
-              </a>
-            </div>
+            <h3 className="mb-4">Posts Recientes</h3>
+            {recentPosts.map(post => (
+              <div className="d-flex mb-3" key={post.id}>
+                <img className="img-fluid" src={post.imageUrl } style={{ width: '80px', height: '80px', objectFit: 'cover' }} alt={post.title} />
+                <a href="#" className="d-flex align-items-center bg-secondary text-dark text-decoration-none px-3" style={{ height: '80px' }}>
+                  {post.title}
+                </a>
+              </div>
+            ))}
           </div>
           <div className="mb-5">
             <h3 className="mb-4">Etiquetas </h3>
             <div className="d-flex flex-wrap m-n1">
-              <a href="" className="btn btn-secondary m-1">Zona Norte</a>
-              <a href="" className="btn btn-secondary m-1">Zona Sur</a>
-              <a href="" className="btn btn-secondary m-1">Zona Sureste</a>
-              <a href="" className="btn btn-secondary m-1">Zona Bajio</a>
-              <a href="" className="btn btn-secondary m-1">Zona Centro</a>
-              <a href="" className="btn btn-secondary m-1">Zona Occidental</a>
+              {tags.map(tag => (
+                <a href="#" className="btn btn-secondary m-1" key={tag}>{tag}</a>
+              ))}
             </div>
           </div>
         </div>

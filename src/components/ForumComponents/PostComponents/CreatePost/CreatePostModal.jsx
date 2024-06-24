@@ -23,6 +23,7 @@ const CreatePostModal = ({ onClose }) => {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   const [image, setImage] = useState(null);
+  const [zone, setZone] = useState('Zona Norte');
   const [loading, setLoading] = useState(false);
 
   const handleTitleChange = (event) => {
@@ -36,6 +37,10 @@ const CreatePostModal = ({ onClose }) => {
   const handleImageChange = (event) => {
     const selectedImage = event.target.files[0];
     setImage(selectedImage);
+  };
+
+  const handleZoneChange = (event) => {
+    setZone(event.target.value);
   };
 
   const handleSubmit = async (event) => {
@@ -55,6 +60,7 @@ const CreatePostModal = ({ onClose }) => {
         title,
         body,
         imageUrl,
+        zone,
         createdAt: new Date(),
       });
 
@@ -98,6 +104,17 @@ const CreatePostModal = ({ onClose }) => {
             accept="image/*"
             onChange={handleImageChange}
           />
+        </div>
+        <div className="form-group">
+          <label htmlFor="zone">Zona</label>
+          <select id="zone" value={zone} onChange={handleZoneChange} required>
+            <option value="Zona Norte">Zona Norte</option>
+            <option value="Zona Sur">Zona Sur</option>
+            <option value="Zona Sureste">Zona Sureste</option>
+            <option value="Zona Bajio">Zona Bajio</option>
+            <option value="Zona Occidental">Zona Occidental</option>
+            <option value="Zona Centro">Zona Centro</option>
+          </select>
         </div>
         <button type="submit" disabled={loading} className="btn-submit">
           {loading ? 'Publicando...' : 'Publicar'}
