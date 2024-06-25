@@ -71,24 +71,24 @@ const ForumScreen = () => {
         </div>
       )}
 
-<div style={{ position: 'fixed', bottom: '20px', left: '20px' }}>
-  <button
-    className="btn btn-primary btn-lg rounded-circle"
-    type="button"
-    style={{ width: '60px', height: '60px', marginRight: '10px' }}
-    onClick={handleOpenCreatePostModal}
-  >
-    <span aria-hidden="true">+</span>
-  </button>
-  <button
-    className="btn btn-danger btn-lg rounded-circle"
-    type="button"
-    style={{ width: '60px', height: '60px' }}
-    onClick={handleLogout}
-  >
-    <span aria-hidden="true">x</span>
-  </button>
-</div>
+        <div style={{ position: 'fixed', bottom: '20px', left: '20px' }}>
+          <button
+            className="btn btn-primary btn-lg rounded-circle"
+            type="button"
+            style={{ width: '60px', height: '60px', marginRight: '10px' }}
+            onClick={handleOpenCreatePostModal}
+          >
+            <span aria-hidden="true">+</span>
+          </button>
+          <button
+            className="btn btn-danger btn-lg rounded-circle"
+            type="button"
+            style={{ width: '60px', height: '60px' }}
+            onClick={handleLogout}
+          >
+            <span aria-hidden="true">x</span>
+          </button>
+        </div>
 
     </div>
   );

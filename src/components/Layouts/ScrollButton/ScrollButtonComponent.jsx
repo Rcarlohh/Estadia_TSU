@@ -1,4 +1,3 @@
-// ScrollButtonComponent.jsx
 import React, { useState, useEffect } from 'react';
 import { FaAngleDoubleUp } from 'react-icons/fa';
 

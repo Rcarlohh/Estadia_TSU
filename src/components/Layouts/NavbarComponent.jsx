@@ -1,16 +1,11 @@
 import React, { useState } from 'react';
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {  faTruck, faPhoneAlt, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { faFacebookF, faTwitter } from '@fortawesome/free-brands-svg-icons';
 
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  const handleLogin = () => {
-    // Aquí puedes manejar la lógica de inicio de sesión
-    setIsLoggedIn(true);
-  };
 
   const handleLogout = () => {
     // Aquí puedes manejar la lógica de cierre de sesión
@@ -64,6 +59,7 @@ const Navbar = () => {
             <NavLink to="/Service" className="nav-item nav-link" activeClassName="active">¿Buscas hombres camión?</NavLink>
             <NavLink to="/Forum" className="nav-item nav-link" activeClassName="active">Buro de clientes</NavLink>
             <NavLink to="/Contact" className="nav-item nav-link" activeClassName="active">Contacto</NavLink>
+            <NavLink to="/Profile"></NavLink>
           </div>
         </div>
       </nav>

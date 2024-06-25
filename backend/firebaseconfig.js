@@ -1,5 +1,7 @@
+// backend/firebaseconfig.js
 import { initializeApp, getApps } from 'firebase/app';
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, signInWithEmailAndPassword } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -14,6 +16,7 @@ const firebaseConfig = {
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApps()[0];
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
+const db = getFirestore(app); // Inicializa Firestore
 
 const signInWithGoogle = () => {
   return signInWithPopup(auth, provider)
@@ -48,4 +51,4 @@ const signOutUser = () => {
     });
 };
 
-export { signInWithGoogle, signInWithEmail, signOutUser };
+export { signInWithGoogle, signInWithEmail, signOutUser, db }; // Exporta db

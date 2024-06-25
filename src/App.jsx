@@ -7,6 +7,7 @@ import ServiceScreen from './screens/ServiceScreen.jsx';
 import ForumScreen from './screens/ForumScreen.jsx';
 import ContactScreen from './screens/ContactScreen.jsx';
 import LoginModalComponent from './components/ForumComponents/LoginModalComponent/LoginModalComponent.jsx'; 
+import ProfileScreen from './screens/ProfileScreen/ProfileScreen.jsx'
 import { UserContext } from '../backend/config/UserContext.jsx'; // Importa el contexto de usuario
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -22,6 +23,7 @@ function App() {
           <Route path="/Service" element={<ServiceScreen />} />
           <Route path="/Forum" element={<ForumScreen />} />
           <Route path="/Contact" element={<ContactScreen />} />
+          <Route path='/Profile' element={<ProfileScreen/>}/>
         </Routes>
       </Layout>
       {!user && <LoginModalComponent />}
