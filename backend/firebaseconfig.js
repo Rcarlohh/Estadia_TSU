@@ -1,6 +1,6 @@
 // backend/firebaseconfig.js
 import { initializeApp, getApps } from 'firebase/app';
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, signInWithEmailAndPassword } from 'firebase/auth';
+import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut, signInWithEmailAndPassword } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
@@ -12,31 +12,30 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
-// Inicializar Firebase solo si no hay aplicaciones inicializadas
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApps()[0];
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
-const db = getFirestore(app); // Inicializa Firestore
+const db = getFirestore(app);
 
 const signInWithGoogle = () => {
   return signInWithPopup(auth, provider)
     .then((result) => {
-      return result.user; // Retorna el usuario
+      return result.user;
     })
     .catch((error) => {
       console.error(error);
-      throw error; // Lanza el error para que pueda ser capturado en el .catch() del componente
+      throw error;
     });
 };
 
 const signInWithEmail = (email, password) => {
   return signInWithEmailAndPassword(auth, email, password)
     .then((result) => {
-      return result.user; // Retorna el usuario
+      return result.user;
     })
     .catch((error) => {
       console.error(error);
-      throw error; // Lanza el error para que pueda ser capturado en el .catch() del componente
+      throw error;
     });
 };
 
@@ -51,4 +50,16 @@ const signOutUser = () => {
     });
 };
 
-export { signInWithGoogle, signInWithEmail, signOutUser, db }; // Exporta db
+const getCurrentUser = () => {
+  return new Promise((resolve, reject) => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        resolve(user);
+      } else {
+        resolve(null);
+      }
+    });
+  });
+};
+
+export { signInWithGoogle, signInWithEmail, signOutUser, getCurrentUser, db };

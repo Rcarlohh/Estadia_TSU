@@ -86,7 +86,7 @@ const LoginModalComponent = ({ isOpen, onClose }) => {
                     <label className="form-label" htmlFor="form2Example22"></label>
                   </div>
                   <div className="text-center pt-0 mb-1 pb-1">
-                    <button className="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="button" onClick={handleEmailLogin}>
+                    <button className="btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="button" onClick={handleEmailLogin}>
                       Ingresar
                     </button>
                   </div>

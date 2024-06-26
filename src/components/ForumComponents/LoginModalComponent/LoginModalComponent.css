@@ -67,12 +67,14 @@
     background-color: #347AB6;
     border-color: #347AB6;
     color: #fff;
+    border-radius: 20px;
   }
   
   .btn-secondary {
     background-color: #fff;
     border-color: #347AB6;
     color: #347AB6;
+    border-radius: 20px;
   }
   
   

@@ -1,15 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import Post from './PostComponents.jsx';
 import { getFirestore, collection, onSnapshot, query, orderBy } from 'firebase/firestore';
+import { getCurrentUser } from '../../../../backend/firebaseconfig.js'; 
 
 const SearchComponent = () => {
   const [posts, setPosts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [recentPosts, setRecentPosts] = useState([]);
   const [tags] = useState(['Zona Norte', 'Zona Sur', 'Zona Sureste', 'Zona Bajio', 'Zona Centro', 'Zona Occidental']);
+  const [currentUser, setCurrentUser] = useState(null);
   const db = getFirestore();
 
   useEffect(() => {
+    getCurrentUser().then(user => {
+      setCurrentUser(user);
+    });
+
     const q = query(collection(db, 'posts'), orderBy('createdAt', 'desc'));
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const postsData = snapshot.docs.map(doc => ({
@@ -25,6 +31,11 @@ const SearchComponent = () => {
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
+  };
+
+  const handleDeletePost = (postId) => {
+    // Lógica para eliminar el post
+    console.log(`Eliminar post con ID: ${postId}`);
   };
 
   const filteredPosts = posts.filter(post => 
@@ -44,12 +55,15 @@ const SearchComponent = () => {
           {filteredPosts.map(post => (
             <Post 
               key={post.id}
+              id={post.id}
               title={post.title}
               body={post.body}
               imageUrl={post.imageUrl}
               createdAt={post.createdAt}
               author={post.author}
               zone={post.zone}
+              currentUser={currentUser}
+              onDelete={handleDeletePost}
             />
           ))}
         </div>
