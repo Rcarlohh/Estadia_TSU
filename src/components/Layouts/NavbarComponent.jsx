@@ -99,7 +99,6 @@ const Navbar = () => {
             <NavLink to="/Service" className="nav-item nav-link" activeClassName="active">¿Buscas hombres camión?</NavLink>
             <NavLink to="/Forum" className="nav-item nav-link" activeClassName="active">Buro de clientes</NavLink>
             <NavLink to="/Contact" className="nav-item nav-link" activeClassName="active">Contacto</NavLink>
-            <NavLink to="/Profile" className="nav-item nav-link" activeClassName="active">Perfil</NavLink>
           </div>
         </div>
         <div className="navbar-nav ml-auto">
