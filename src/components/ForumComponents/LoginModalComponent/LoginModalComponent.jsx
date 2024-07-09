@@ -24,6 +24,7 @@ const LoginModalComponent = ({ isOpen, onClose }) => {
       .then((user) => {
         console.log(user);
         setUser(user);
+        window.location.reload();
         onClose(); // Cierra el modal después de iniciar sesión
       })
       .catch((error) => {
@@ -36,6 +37,7 @@ const LoginModalComponent = ({ isOpen, onClose }) => {
       .then((user) => {
         console.log(user);
         setUser(user);
+        window.location.reload();
         onClose(); // Cierra el modal después de iniciar sesión
       })
       .catch((error) => {
