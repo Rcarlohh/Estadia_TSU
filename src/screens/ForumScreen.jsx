@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import HeaderComponent from '../components/Layouts/HeaderComponent';
 import LoginModalComponent from '../components/ForumComponents/LoginModalComponent/LoginModalComponent.jsx';
 import AllPostComponent from '../components/ForumComponents/PostComponents/AllPostComponents.jsx';
 import { signOutUser } from '../../backend/firebaseconfig.js'; 
 import CreatePostModal from '../components/ForumComponents/PostComponents/CreatePost/CreatePostModal.jsx';
+import { UserContext } from '../../backend/config/UserContext';
 
 const ForumScreen = () => {
-  const [isLoginModalOpen, setLoginModalOpen] = useState(true);
+  const { user } = useContext(UserContext);
+  const [isLoginModalOpen, setLoginModalOpen] = useState(!user);
   const [isCreatePostModalOpen, setCreatePostModalOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
 
@@ -71,25 +73,17 @@ const ForumScreen = () => {
         </div>
       )}
 
-        <div style={{ position: 'fixed', bottom: '20px', left: '20px' }}>
-          <button
-            className="btn btn-primary btn-lg rounded-circle"
-            type="button"
-            style={{ width: '60px', height: '60px', marginRight: '10px' }}
-            onClick={handleOpenCreatePostModal}
-          >
-            <span aria-hidden="true">+</span>
-          </button>
-          <button
-            className="btn btn-danger btn-lg rounded-circle"
-            type="button"
-            style={{ width: '60px', height: '60px' }}
-            onClick={handleLogout}
-          >
-            <span aria-hidden="true">x</span>
-          </button>
-        </div>
+      <div style={{ position: 'fixed', bottom: '20px', left: '20px' }}>
+        <button
+          className="btn btn-primary btn-lg rounded-circle"
+          type="button"
+          style={{ width: '60px', height: '60px', marginRight: '10px' }}
+          onClick={handleOpenCreatePostModal}
+        >
+          <span aria-hidden="true">+</span>
+        </button>
 
+      </div>
     </div>
   );
 };

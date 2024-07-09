@@ -1,17 +1,23 @@
-import React, { useContext, useState } from 'react';
-import { Link } from 'react-router-dom'; // Importa Link desde React Router
+import React, { useContext, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import './LoginModalComponent.css';
 import { signInWithGoogle, signInWithEmail } from '../../../../backend/firebaseconfig'; 
-import { UserContext } from '../../../../backend/config/UserContext.jsx'; 
+import { UserContext } from '../../../../backend/config/UserContext';
 
 const LoginModalComponent = ({ isOpen, onClose }) => {
-  const { setUser } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  if (!isOpen) return null;
+  useEffect(() => {
+    if (user) {
+      onClose(); // Cierra el modal si el usuario ya está autenticado
+    }
+  }, [user, onClose]);
+
+  if (!isOpen || user) return null;
 
   const handleGoogleLogin = () => {
     signInWithGoogle()
