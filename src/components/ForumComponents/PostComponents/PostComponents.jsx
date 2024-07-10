@@ -1,7 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { collection, addDoc, query, getDocs } from 'firebase/firestore';
+import { db } from '../../../../backend/firebaseconfig';
 
 const Post = ({ id, title, body, imageUrl, createdAt, author, zone, currentUser, onDelete }) => {
   const [showFullBody, setShowFullBody] = useState(false);
+  const [comment, setComment] = useState('');
+  const [comments, setComments] = useState([]);
+  const [showComments, setShowComments] = useState(false);
+  const [showCommentInput, setShowCommentInput] = useState(false);
+
+  useEffect(() => {
+    const fetchComments = async () => {
+      const q = query(collection(db, 'posts', id, 'comments'));
+      const querySnapshot = await getDocs(q);
+      const commentsData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setComments(commentsData);
+    };
+
+    fetchComments();
+  }, [id]);
+
+  const handleAddComment = async () => {
+    if (comment.trim()) {
+      await addDoc(collection(db, 'posts', id, 'comments'), {
+        text: comment,
+        author: currentUser.email,
+        createdAt: new Date(),
+      });
+      setComment('');
+      setComments([...comments, { text: comment, author: currentUser.email, createdAt: new Date() }]);
+    }
+  };
 
   const date = new Date(createdAt.seconds * 1000);
   const day = date.getDate();
@@ -35,7 +64,7 @@ const Post = ({ id, title, body, imageUrl, createdAt, author, zone, currentUser,
     setShowFullBody(!showFullBody);
   };
 
-  const maxBodyLength = 100; 
+  const maxBodyLength = 100;
 
   return (
     <div className="pb-3">
@@ -80,6 +109,53 @@ const Post = ({ id, title, body, imageUrl, createdAt, author, zone, currentUser,
             </button>
           )}
         </p>
+        <div className="mt-4">
+          <button
+            onClick={() => setShowComments(!showComments)}
+            className="btn btn-primary mb-3"
+            style={{ borderRadius: '20px', padding: '0.25rem 1rem' }}
+          >
+            {showComments ? 'Ocultar comentarios' : `Comentarios (${comments.length})`}
+          </button>
+          {showComments && (
+            <div className="mb-3">
+              {comments.map((comment, index) => (
+                <div key={index} className="bg-light p-2 mb-2 rounded">
+                  <p className="mb-0"><strong>{comment.author}</strong>: {comment.text}</p>
+                </div>
+              ))}
+              {currentUser && (
+                <>
+                  <button
+                    onClick={() => setShowCommentInput(!showCommentInput)}
+                    className="btn btn-primary mb-3"
+                    style={{ borderRadius: '20px', padding: '0.25rem 1rem', position: 'relative', float: 'right' }}
+                  >
+                    {showCommentInput ? 'Cancelar' : 'Agregar comentario'}
+                  </button>
+                  {showCommentInput && (
+                    <div className="d-flex">
+                      <input
+                        type="text"
+                        className="form-control mr-2"
+                        value={comment}
+                        onChange={(e) => setComment(e.target.value)}
+                        placeholder="Escribe un comentario..."
+                      />
+                      <button
+                        onClick={handleAddComment}
+                        className="btn btn-primary"
+                        style={{ borderRadius: '20px', padding: '0.25rem 1rem' }}
+                      >
+                        Comentar
+                      </button>
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

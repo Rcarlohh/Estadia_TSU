@@ -6,7 +6,6 @@ const AllPostComponent = () => {
   const { user } = useContext(UserContext);
     return (
       <div>
-        {user && <p className="user-welcome">Bienvenido, {user.displayName}!</p>}
             <SearchComponent/>        
       </div>
     );
