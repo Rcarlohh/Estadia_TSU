@@ -1,7 +1,7 @@
 import React,{ useContext }  from "react";
 import SearchComponent from "./SearchComponent";
 import { UserContext } from "../../../../backend/config/UserContext.jsx";
-import './AllPostCss/AllPostComponent.css'
+import './PostCss/AllPostComponent.css'
 const AllPostComponent = () => {
   const { user } = useContext(UserContext);
     return (
