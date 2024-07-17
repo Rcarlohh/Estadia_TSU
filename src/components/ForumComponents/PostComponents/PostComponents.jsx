@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { collection, addDoc, query, getDocs } from 'firebase/firestore';
 import { db } from '../../../../backend/firebaseconfig';
+import DeletePostModal from './DeletePostModal/DeletePostModal';
+import EditPostModal from './EditPostModal/EditPostModal';
 
-const Post = ({ id, title, body, imageUrl, createdAt, author, zone, currentUser, onDelete }) => {
+const Post = ({ id, title, body, imageUrl, createdAt, author, zone, currentUser, onDelete, onEdit }) => {
   const [showFullBody, setShowFullBody] = useState(false);
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState([]);
   const [showComments, setShowComments] = useState(false);
   const [showCommentInput, setShowCommentInput] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [postToEdit, setPostToEdit] = useState(null);
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -50,14 +55,17 @@ const Post = ({ id, title, body, imageUrl, createdAt, author, zone, currentUser,
   };
 
   const handleShare = () => {
-    navigator.clipboard.writeText(window.location.href + `/post/${id}`);
+    navigator.clipboard.writeText(`${window.location.href}/post/${id}`);
     alert('Enlace copiado al portapapeles');
   };
 
   const handleDelete = () => {
-    if (onDelete) {
-      onDelete(id);
-    }
+    setShowDeleteModal(true);
+  };
+
+  const handleEdit = () => {
+    setPostToEdit({ id, title, body, imageUrl });
+    setShowEditModal(true);
   };
 
   const toggleShowFullBody = () => {
@@ -94,7 +102,12 @@ const Post = ({ id, title, body, imageUrl, createdAt, author, zone, currentUser,
               <ul className="dropdown-menu" aria-labelledby="menuButton">
                 {imageUrl && <li><button className="dropdown-item" onClick={handleDownloadImage}>Descargar Imagen</button></li>}
                 <li><button className="dropdown-item" onClick={handleShare}>Compartir</button></li>
-                {isAuthor && <li><button className="dropdown-item" onClick={handleDelete}>Eliminar</button></li>}
+                {isAuthor && (
+                  <>
+                    <li><button className="dropdown-item" onClick={handleEdit}>Editar</button></li>
+                    <li><button className="dropdown-item" onClick={handleDelete}>Eliminar</button></li>
+                  </>
+                )}
               </ul>
             </div>
           </div>
@@ -157,6 +170,26 @@ const Post = ({ id, title, body, imageUrl, createdAt, author, zone, currentUser,
           )}
         </div>
       </div>
+      {showDeleteModal && (
+        <DeletePostModal
+          onClose={() => setShowDeleteModal(false)}
+          onDelete={() => {
+            onDelete(id);
+            setShowDeleteModal(false);
+          }}
+        />
+      )}
+
+      {showEditModal && (
+        <EditPostModal
+          onClose={() => setShowEditModal(false)}
+          post={postToEdit}
+          onSave={(updatedPost) => {
+            onEdit(id, updatedPost);
+            setShowEditModal(false);
+          }}
+        />
+      )}
     </div>
   );
 };

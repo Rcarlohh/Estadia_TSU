@@ -7,8 +7,9 @@ import ServiceScreen from './screens/ServiceScreen.jsx';
 import ForumScreen from './screens/ForumScreen.jsx';
 import ContactScreen from './screens/ContactScreen.jsx';
 import LoginModalComponent from './components/ForumComponents/LoginModalComponent/LoginModalComponent.jsx'; 
-import ProfileScreen from './screens/ProfileScreen/ProfileScreen.jsx'
-import { UserContext } from '../backend/config/UserContext.jsx'; // Importa el contexto de usuario
+import ProfileScreen from './screens/ProfileScreen/ProfileScreen.jsx';
+import SettingsScreen from './screens/SettingsScreen/SettingsScreen.jsx';
+import { UserContext } from '../backend/config/UserContext.jsx'; 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
@@ -16,16 +17,18 @@ function App() {
 
   return (
     <Router>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<HomeScreen />} />
-          <Route path="/About" element={<AboutScreen />} />
-          <Route path="/Service" element={<ServiceScreen />} />
-          <Route path="/Forum" element={<ForumScreen />} />
-          <Route path="/Contact" element={<ContactScreen />} />
-          <Route path='/Profile' element={<ProfileScreen/>}/>
-        </Routes>
-      </Layout>
+      <Routes>
+        {/* Rutas que usan el layout */}
+        <Route path="/" element={<Layout><HomeScreen /></Layout>} />
+        <Route path="/About" element={<Layout><AboutScreen /></Layout>} />
+        <Route path="/Service" element={<Layout><ServiceScreen /></Layout>} />
+        <Route path="/Forum" element={<Layout><ForumScreen /></Layout>} />
+        <Route path="/Contact" element={<Layout><ContactScreen /></Layout>} />
+
+        {/* Rutas que no usan el layout */}
+        <Route path="/Profile" element={<ProfileScreen />} />
+        <Route path="/Settings" element={<SettingsScreen />} />
+      </Routes>
       {!user && <LoginModalComponent />}
     </Router>
   );

@@ -94,11 +94,11 @@ const Navbar = () => {
         </button>
         <div className="collapse navbar-collapse justify-content-between px-lg-6" id="navbarCollapse">
           <div className="navbar-nav m-0 py-0">
-            <NavLink to="/" exact className="nav-item nav-link" activeClassName="active">Inicio</NavLink>
-            <NavLink to="/About" className="nav-item nav-link" activeClassName="active">Quiénes Somos</NavLink>
-            <NavLink to="/Service" className="nav-item nav-link" activeClassName="active">¿Buscas hombres camión?</NavLink>
-            <NavLink to="/Forum" className="nav-item nav-link" activeClassName="active">Buro de clientes</NavLink>
-            <NavLink to="/Contact" className="nav-item nav-link" activeClassName="active">Contacto</NavLink>
+            <NavLink to="/" className={({ isActive }) => isActive ? 'nav-item nav-link active' : 'nav-item nav-link'}>Inicio</NavLink>
+            <NavLink to="/About" className={({ isActive }) => isActive ? 'nav-item nav-link active' : 'nav-item nav-link'}>Quiénes Somos</NavLink>
+            <NavLink to="/Service" className={({ isActive }) => isActive ? 'nav-item nav-link active' : 'nav-item nav-link'}>¿Buscas hombres camión?</NavLink>
+            <NavLink to="/Forum" className={({ isActive }) => isActive ? 'nav-item nav-link active' : 'nav-item nav-link'}>Buro de clientes</NavLink>
+            <NavLink to="/Contact" className={({ isActive }) => isActive ? 'nav-item nav-link active' : 'nav-item nav-link'}>Contacto</NavLink>
           </div>
         </div>
         <div className="navbar-nav ml-auto">
@@ -116,6 +116,8 @@ const Navbar = () => {
                 {user && user.displayName}
               </a>
               <div className="dropdown-menu dropdown-menu-right">
+                <NavLink to="/Profile" className="dropdown-item">Perfil</NavLink>
+                <NavLink to="/Settings" className="dropdown-item">Configuración</NavLink>
                 <button className="dropdown-item" onClick={handleLogout}>
                   Cerrar Sesión
                 </button>

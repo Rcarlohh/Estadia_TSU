@@ -49,6 +49,10 @@ const SearchComponent = () => {
     console.log(`Eliminar post con ID: ${postId}`);
   };
 
+  const handleEditPost = (postId, updatedPost) => {
+    console.log(`Editar post con ID: ${postId}`, updatedPost);
+  };
+
   const fetchComments = async (postId) => {
     const q = query(collection(db, 'posts', postId, 'comments'), orderBy('createdAt', 'desc'));
     const querySnapshot = await getDocs(q);
@@ -100,6 +104,7 @@ const SearchComponent = () => {
                 zone={activeRecentPost.zone}
                 currentUser={currentUser}
                 onDelete={handleDeletePost}
+                onEdit={handleEditPost}
                 fromRecentPosts={true}
               />
               <button 
@@ -150,6 +155,7 @@ const SearchComponent = () => {
                 zone={post.zone}
                 currentUser={currentUser}
                 onDelete={handleDeletePost}
+                onEdit={handleEditPost}
               />
             ))
           )}

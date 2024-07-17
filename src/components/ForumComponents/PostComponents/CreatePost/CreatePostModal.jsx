@@ -1,25 +1,12 @@
-import React, { useState } from 'react';
-import { initializeApp, getApps } from 'firebase/app';
+import React, { useState, useContext } from 'react';
 import { getFirestore, collection, addDoc } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { db } from '../../../../../backend/firebaseconfig';
+import { UserContext } from '../../../../../backend/config/UserContext.jsx';
 import './CreatePostModal.css'; // Importar el archivo CSS
 
-// Configuración de Firebase
-const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
-};
-
-// Inicializar Firebase solo si no hay aplicaciones inicializadas
-const app = !getApps().length ? initializeApp(firebaseConfig) : getApps()[0];
-const db = getFirestore(app);
-const storage = getStorage(app);
-
 const CreatePostModal = ({ onClose }) => {
+  const { user } = useContext(UserContext);
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   const [image, setImage] = useState(null);
@@ -51,7 +38,7 @@ const CreatePostModal = ({ onClose }) => {
       let imageUrl = '';
 
       if (image) {
-        const imageRef = ref(storage, `images/${image.name}`);
+        const imageRef = ref(getStorage(), `images/${image.name}`);
         await uploadBytes(imageRef, image);
         imageUrl = await getDownloadURL(imageRef);
       }
@@ -61,6 +48,7 @@ const CreatePostModal = ({ onClose }) => {
         body,
         imageUrl,
         zone,
+        author: user.email, // Agregar el autor aquí
         createdAt: new Date(),
       });
 

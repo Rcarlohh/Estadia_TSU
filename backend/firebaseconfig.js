@@ -1,7 +1,7 @@
-// backend/firebaseconfig.js
 import { initializeApp, getApps } from 'firebase/app';
 import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut, signInWithEmailAndPassword } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';  // Importar Firebase Storage y funciones adicionales
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -16,6 +16,7 @@ const app = !getApps().length ? initializeApp(firebaseConfig) : getApps()[0];
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 const db = getFirestore(app);
+const storage = getStorage(app);  // Inicializar Firebase Storage
 
 const signInWithGoogle = () => {
   return signInWithPopup(auth, provider)
@@ -62,4 +63,14 @@ const getCurrentUser = () => {
   });
 };
 
-export { signInWithGoogle, signInWithEmail, signOutUser, getCurrentUser, db };
+// Función para subir una imagen a Firebase Storage y obtener la URL de descarga
+const uploadImage = async (file) => {
+  if (!file) return null;
+
+  const storageRef = ref(storage, `images/${file.name}`);
+  await uploadBytes(storageRef, file);
+  const imageUrl = await getDownloadURL(storageRef);
+  return imageUrl;
+};
+
+export { signInWithGoogle, signInWithEmail, signOutUser, getCurrentUser, db, storage, uploadImage };
