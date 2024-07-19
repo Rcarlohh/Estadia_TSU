@@ -83,6 +83,7 @@ const ProfileScreen = () => {
                 </div>
               </div>
               <div className="card-body">
+                <p className="card-text"> </p>
                 <p className="card-text">Nombre: {user.displayName}</p>
                 <p className="card-text">Email: {maskEmail(user.email)}</p>
                 <button onClick={handleBack} className="btn btn-secondary mt-3">Regresar</button>
