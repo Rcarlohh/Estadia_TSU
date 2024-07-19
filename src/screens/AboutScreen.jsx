@@ -54,9 +54,12 @@ const AboutScreen = () => {
         />
         </div>
     </div>
+    <h2 className="text-center text-primary">Delegados Actuales</h2>
         <div className="container-fluid pt-5">
+        
             <div className="container">
                 <div className="row">
+                
                 <TeamComponent
                     name="Carlos Rivera"
                     role="Delegado de la Zona Norte (Tijuana, Baja California)"

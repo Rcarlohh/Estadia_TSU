@@ -1,8 +1,8 @@
-// HeaderComponent.js
 import React, { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { db } from '../../../../backend/firebaseconfig';
 import { collection, addDoc } from 'firebase/firestore';
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const HeaderComponent = () => {
     const [busqueda, setBusqueda] = useState('');
@@ -12,6 +12,7 @@ const HeaderComponent = () => {
     const [nombre, setNombre] = useState('');
     const [email, setEmail] = useState('');
     const [telefono, setTelefono] = useState('');
+    const [image, setImage] = useState(null);
 
     const handleSearchChange = (event) => {
         setBusqueda(event.target.value);
@@ -34,11 +35,22 @@ const HeaderComponent = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        let imageUrl = '';
+
+        if (image) {
+            const storage = getStorage();
+            const storageRef = ref(storage, `images/${image.name}`);
+            await uploadBytes(storageRef, image);
+            imageUrl = await getDownloadURL(storageRef);
+        }
+
         try {
             await addDoc(collection(db, "Transportistas"), {
                 nombre,
                 email,
-                telefono
+                telefono,
+                imageUrl
             });
             handleClose();
         } catch (error) {
@@ -75,39 +87,9 @@ const HeaderComponent = () => {
                             <option value="5">Occidente</option>
                         </select>
                     </div>
-                    <Button variant="primary" onClick={handleShow}>
-                        Agregar Transportista
-                    </Button>
+                  
                 </div>
             </div>
-
-            <Modal show={show} onHide={handleClose}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Agregar Transportista</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form onSubmit={handleSubmit}>
-                        <Form.Group controlId="formNombre">
-                            <Form.Label>Nombre</Form.Label>
-                            <Form.Control type="text" placeholder="Ingresa el nombre" value={nombre} onChange={(e) => setNombre(e.target.value)} />
-                        </Form.Group>
-
-                        <Form.Group controlId="formEmail">
-                            <Form.Label>Email</Form.Label>
-                            <Form.Control type="email" placeholder="Ingresa el email" value={email} onChange={(e) => setEmail(e.target.value)} />
-                        </Form.Group>
-
-                        <Form.Group controlId="formTelefono">
-                            <Form.Label>Teléfono</Form.Label>
-                            <Form.Control type="text" placeholder="Ingresa el teléfono" value={telefono} onChange={(e) => setTelefono(e.target.value)} />
-                        </Form.Group>
-
-                        <Button variant="primary" type="submit">
-                            Guardar
-                        </Button>
-                    </Form>
-                </Modal.Body>
-            </Modal>
         </div>
     );
 };

@@ -131,8 +131,8 @@ const SearchComponent = () => {
       )}
       <div className="row">
         <div className="col-lg-8">
-          <h2 className="font-weight-bold mb-3">
-            <div style={{ color: '#347AB6' }}>
+          <h2 className="text-primary font-weight-bold mb-3">
+            <div>
               Destacados 
             </div>
           </h2>

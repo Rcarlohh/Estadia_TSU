@@ -10,7 +10,7 @@ import LoginModalComponent from './components/ForumComponents/LoginModalComponen
 import ProfileScreen from './screens/ProfileScreen/ProfileScreen.jsx';
 import SettingsScreen from './screens/SettingsScreen/SettingsScreen.jsx';
 import { UserContext } from '../backend/config/UserContext.jsx'; 
-import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 function App() {
   const { user } = useContext(UserContext); // Utiliza el contexto de usuario

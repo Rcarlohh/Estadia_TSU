@@ -9,7 +9,7 @@
 
 .create-post-modal h2 {
   text-align: center;
-  color: #347AB6;
+  color: #d93012;
   margin-bottom: 20px;
 }
 
@@ -46,7 +46,7 @@
 .btn-submit {
   width: 100%;
   padding: 10px;
-  background-color: #347AB6;
+  background-color: #d93012;
   color: #fff;
   border: none;
   border-radius: 20px;

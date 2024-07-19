@@ -47,13 +47,12 @@ const LoginModalComponent = ({ isOpen, onClose }) => {
 
   return (
     <div className="modal-overlay">
-      <div className="modal-content">
-        <div className="card rounded-3 text-black">
+      <div className="modal-content">     
           <div className="row g-0">
             <div className="col-lg-6 d-flex align-items-center gradient-custom-2">
-              <div className="text-white px-4 py-5 p-md-6 mx-md-4">
+              <div className="text-white px-4 py-5 p-md-6 mx-md-2">
                 <h5 className="text-white mb-4">¡Únete a nuestra comunidad de hombres camioneros y clientes!</h5>
-                <p className="small mb-0">
+                <p className="text-white small mb-0">
                   Descubre experiencias, comparte anécdotas y conecta con otros miembros.
                   Inicia sesión para acceder a todas las publicaciones del foro y formar parte de la conversación.
                 </p>
@@ -65,7 +64,7 @@ const LoginModalComponent = ({ isOpen, onClose }) => {
               </div>
             </div>
             <div className="col-lg-6">
-              <div className="card-body p-md-4 mx-md-3">
+              <div className="card-body p-md-3 mx-md-4">
                 <div className="text-center">
                   <Link to="/">X</Link>
                   <h4 className="mt-5 mb-4 pb-6">Inicia Sesión</h4>
@@ -102,7 +101,6 @@ const LoginModalComponent = ({ isOpen, onClose }) => {
               </div>
             </div>
           </div>
-        </div>
       </div>
     </div>
   );

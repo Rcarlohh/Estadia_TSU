@@ -112,7 +112,7 @@ const Post = ({ id, title, body, imageUrl, createdAt, author, zone, currentUser,
             </div>
           </div>
         </div>
-        <a>Publicado por {author || 'Transportista'}</a>
+        <a>Publicado Anonimamente</a>
         <h4 className="font-weight-bold mb-3">{title}</h4>
         <p>
           {showFullBody ? body : `${body.substring(0, maxBodyLength)}...`}

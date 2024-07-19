@@ -2,11 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { db } from '../../backend/firebaseconfig';
 import { collection, addDoc, getDocs } from 'firebase/firestore';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import TeamCardComponent from '../components/ServiceComponents/TeamComponents/TeamCardComponent';
-import imgTeam1 from '../assets/img/imgAlejandroGomez.png';
-import imgTeam2 from '../assets/img/imgBajioFreight.png';
-import imgTeam3 from '../assets/img/imgSierraMadre.png';
-import imgTeam4 from '../assets/img/imgCarmenTorres.png';
 
 const ServiceScreen = () => {
     const [busqueda, setBusqueda] = useState('');
@@ -16,6 +13,7 @@ const ServiceScreen = () => {
     const [nombre, setNombre] = useState('');
     const [email, setEmail] = useState('');
     const [telefono, setTelefono] = useState('');
+    const [image, setImage] = useState(null);
     const [transportistas, setTransportistas] = useState([]);
     const [filteredTransportistas, setFilteredTransportistas] = useState([]);
 
@@ -58,15 +56,27 @@ const ServiceScreen = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        let imageUrl = '';
+
+        if (image) {
+            const storage = getStorage();
+            const storageRef = ref(storage, `images/${image.name}`);
+            await uploadBytes(storageRef, image);
+            imageUrl = await getDownloadURL(storageRef);
+        }
+
         try {
             await addDoc(collection(db, "Transportistas"), {
                 nombre,
                 email,
                 telefono,
                 tipoTransporte,
-                region
+                region,
+                imageUrl
             });
             handleClose();
+            window.location.reload();
         } catch (error) {
             console.error("Error adding document: ", error);
         }
@@ -151,6 +161,11 @@ const ServiceScreen = () => {
                                 </Form.Control>
                             </Form.Group>
 
+                            <Form.Group controlId="formImage">
+                                <Form.Label>Imagen</Form.Label>
+                                <Form.Control type="file" onChange={(e) => setImage(e.target.files[0])} />
+                            </Form.Group>
+
                             <Button variant="primary" type="submit">
                                 Guardar
                             </Button>
@@ -167,12 +182,7 @@ const ServiceScreen = () => {
                                 key={transportista.id}
                                 nombre={transportista.nombre}
                                 zona={transportista.region}
-                                imgSrc={
-                                    transportista.nombre === "Alejandro Gómez" ? imgTeam1 :
-                                    transportista.nombre === "Bajío Freight Co." ? imgTeam2 :
-                                    transportista.nombre === "Carga Sierra Madre, S.R.L." ? imgTeam3 :
-                                    transportista.nombre === "Carmen Torres" ? imgTeam4 : ""
-                                }
+                                imgSrc={transportista.imageUrl || ''}
                                 facebookUrl={transportista.facebookUrl}
                                 telefono={transportista.telefono}
                                 email={transportista.email}

@@ -5,7 +5,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5); /* Fondo borroso */
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -14,7 +14,7 @@
 
 .modal-content {
   background-color: #fff;
-  border-radius: 20px; /* Bordes redondeados del modal */
+  border-radius: 20px;
   padding: 0;
   position: relative;
   max-width: 800px;
@@ -39,7 +39,7 @@
 
 /* Estilos para el card de login */
 .gradient-custom-2 {
-  background: #347AB6;
+  background: #d93012;
   border-top-right-radius: 2rem;
   border-bottom-right-radius: 2rem;
   padding: 20px;
@@ -47,12 +47,12 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: rgb(255, 255, 255);
+  color: #fff;
 }
 
 .card {
-  background: rgb(255, 255, 255);
-  border-radius: 20px;
+  background: #fff;
+  border-radius: 30px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -66,17 +66,15 @@
 }
 
 .btn-primary {
-  background-color: #347AB6;
-  border-color: #347AB6;
+  background-color: #d93012;
+  border-color: #d93012;
   color: #fff;
-  border-radius: 20px;
 }
 
 .btn-secondary {
   background-color: #fff;
-  border-color: #347AB6;
-  color: #347AB6;
-  border-radius: 20px;
+  border-color: #d93012;
+  color: #d93012;
 }
 
 .btn-block {
@@ -84,11 +82,11 @@
 }
 
 .text-white {
-  color: white;
+  color: #fff;
 }
 
 .text-black {
-  color: black;
+  color: #000;
 }
 
 .text-center {

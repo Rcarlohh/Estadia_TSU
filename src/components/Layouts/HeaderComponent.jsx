@@ -10,7 +10,7 @@ const HeaderComponent = ({ title, subtitle1, subtitle2 }) => {
         <div className="d-inline-flex align-items-center text-white">
           <p className="m-0"><a className="text-white">{subtitle1}</a></p>
           <FontAwesomeIcon icon={faCircle} className="px-3" />
-          <p className="m-0">{subtitle2}</p>
+          <p className="text-white m-0">{subtitle2}</p>
         </div>
       </div>
     </div>

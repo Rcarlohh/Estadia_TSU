@@ -40,7 +40,7 @@ const FooterComponent = () => {
             bottom: '20px',
             right: '20px',
             zIndex: '9999',
-            backgroundColor: '#007bff',
+            backgroundColor: '#d93012',
             color: '#fff',
             borderRadius: '50%',
             border: 'none',
@@ -61,9 +61,9 @@ const FooterComponent = () => {
             <div className="row">
               <div className="col-md-6 mb-5">
                 <h3 className="text-primary mb-4">Ponte en Contacto</h3>
-                <p><FontAwesomeIcon icon={faMapMarkerAlt} className="mr-2"/>123 Calle, Ciudad de México, MX</p>
-                <p><FontAwesomeIcon icon={faPhoneAlt} className="mr-2"style={{ transform: 'scaleX(-1)' }}/>+52 123 456 7890</p>
-                <p><FontAwesomeIcon icon={faEnvelope} className="mr-2"/>contacto@Asociación.org.mx</p>
+                <p className="text-white"><FontAwesomeIcon icon={faMapMarkerAlt} className="mr-2"/>123 Calle, Ciudad de México, MX</p>
+                <p className="text-white"><FontAwesomeIcon icon={faPhoneAlt} className="mr-2"style={{ transform: 'scaleX(-1)' }}/>+52 123 456 7890</p>
+                <p className="text-white"><FontAwesomeIcon icon={faEnvelope} className="mr-2"/>contacto@Asociación.org.mx</p>
                 <div className="d-flex justify-content-start mt-4">
                   {/* Enlaces a redes sociales de Asociación */}
                 </div>
@@ -78,7 +78,7 @@ const FooterComponent = () => {
           {/* Suscripción al boletín */}
           <div className="col-lg-5 col-md-6 mb-5">
             <h3 className="text-primary mb-4">Boletín Informativo</h3>
-            <p>[Breve texto sobre las ventajas de suscribirse al boletín de Asociación.]</p>
+            <p className="text-white">[Breve texto sobre las ventajas de suscribirse al boletín de Asociación.]</p>
             {/* Formulario de suscripción */}
           </div>
         </div>
