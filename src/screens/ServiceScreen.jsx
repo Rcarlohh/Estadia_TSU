@@ -3,6 +3,7 @@ import { Modal, Button, Form } from 'react-bootstrap';
 import { db } from '../../backend/firebaseconfig';
 import { collection, addDoc, getDocs } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { getAuth } from 'firebase/auth';
 import TeamCardComponent from '../components/ServiceComponents/TeamComponents/TeamCardComponent';
 
 const ServiceScreen = () => {
@@ -16,6 +17,7 @@ const ServiceScreen = () => {
     const [image, setImage] = useState(null);
     const [transportistas, setTransportistas] = useState([]);
     const [filteredTransportistas, setFilteredTransportistas] = useState([]);
+    const [currentUser, setCurrentUser] = useState(null);
 
     useEffect(() => {
         const fetchTransportistas = async () => {
@@ -26,6 +28,19 @@ const ServiceScreen = () => {
         };
 
         fetchTransportistas();
+    }, []);
+
+    useEffect(() => {
+        const auth = getAuth();
+        const unsubscribe = auth.onAuthStateChanged(user => {
+            if (user) {
+                setCurrentUser(user);
+            } else {
+                setCurrentUser(null);
+            }
+        });
+
+        return () => unsubscribe();
     }, []);
 
     const handleSearchChange = (event) => {
@@ -82,6 +97,8 @@ const ServiceScreen = () => {
         }
     };
 
+    const isAuthorized = currentUser && (currentUser.email === 'rangel.crlos@gmail.com' || currentUser.email === 'gustavo.webplatform@gmail.com');
+
     return (
         <div>
             <div className="jumbotron jumbotron-fluid mb-5">
@@ -112,9 +129,11 @@ const ServiceScreen = () => {
                                 <option value="Occidente">Occidente</option>
                             </select>
                         </div>
-                        <Button variant="primary" onClick={handleShow}>
-                            Agregar Transportista
-                        </Button>
+                        {isAuthorized && (
+                            <Button variant="primary" onClick={handleShow}>
+                                Agregar Transportista
+                            </Button>
+                        )}
                     </div>
                 </div>
 
