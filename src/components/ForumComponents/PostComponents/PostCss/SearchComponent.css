@@ -92,4 +92,35 @@
   .dark-background {
     background-color: rgba(0, 0, 0, 0.5);
   }
+  .recent-post {
+    cursor: pointer;
+    padding: 8px; 
+    border: 1px solid #ddd;
+    margin-bottom: 8px; 
+    border-radius: 10px; 
+    background-color: #f9f9f9;
+    display: flex;
+    align-items: center;
+  }
+  
+  .recent-post:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .recent-post .recent-post-title {
+    margin: 0;
+    color: #333;
+    flex: 1; /* Para que el título ocupe el espacio disponible */
+    font-weight: normal !important; /* Aumentar la especificidad */
+  }
+  
+  .recent-post-image {
+    max-width: 50px; 
+    height: auto;
+    margin-right: 10px; 
+    border-radius: 5px; 
+    display: block;
+  }
+  
+  
   

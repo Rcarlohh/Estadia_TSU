@@ -3,7 +3,14 @@ import { getFirestore, collection, addDoc } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db } from '../../../../../backend/firebaseconfig';
 import { UserContext } from '../../../../../backend/config/UserContext.jsx';
-import './CreatePostModal.css'; // Importar el archivo CSS
+import './CreatePostModal.css';
+
+const quickMessages = [
+  'Este es un mensaje rápido.',
+  '¡No te pierdas este evento!',
+  'Recuerda seguirnos en nuestras redes sociales.',
+  '¡Participa y gana premios!',
+];
 
 const CreatePostModal = ({ onClose }) => {
   const { user } = useContext(UserContext);
@@ -30,6 +37,10 @@ const CreatePostModal = ({ onClose }) => {
     setZone(event.target.value);
   };
 
+  const handleQuickMessageClick = (message) => {
+    setBody((prevBody) => prevBody + ' ' + message);
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
@@ -48,7 +59,7 @@ const CreatePostModal = ({ onClose }) => {
         body,
         imageUrl,
         zone,
-        author: user.email, // Agregar el autor aquí
+        author: user.email,
         createdAt: new Date(),
       });
 
@@ -83,6 +94,18 @@ const CreatePostModal = ({ onClose }) => {
             onChange={handleBodyChange}
             required
           ></textarea>
+          <div className="quick-messages">
+            {quickMessages.map((message, index) => (
+              <button
+                type="button"
+                key={index}
+                onClick={() => handleQuickMessageClick(message)}
+                className="btn-quick-message"
+              >
+                {message}
+              </button>
+            ))}
+          </div>
         </div>
         <div className="form-group">
           <label htmlFor="image">Imagen</label>

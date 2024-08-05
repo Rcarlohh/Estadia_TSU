@@ -5,6 +5,7 @@ import { collection, addDoc, getDocs } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { getAuth } from 'firebase/auth';
 import TeamCardComponent from '../components/ServiceComponents/TeamComponents/TeamCardComponent';
+import './ServiceScreen/ServiceScreen.css';
 
 const ServiceScreen = () => {
     const [busqueda, setBusqueda] = useState('');
@@ -15,9 +16,21 @@ const ServiceScreen = () => {
     const [email, setEmail] = useState('');
     const [telefono, setTelefono] = useState('');
     const [image, setImage] = useState(null);
+    const [asociaciones, setAsociaciones] = useState([]);
+    const [selectedAsociacion, setSelectedAsociacion] = useState(null);
     const [transportistas, setTransportistas] = useState([]);
     const [filteredTransportistas, setFilteredTransportistas] = useState([]);
     const [currentUser, setCurrentUser] = useState(null);
+
+    useEffect(() => {
+        const fetchAsociaciones = async () => {
+            const querySnapshot = await getDocs(collection(db, "Asociaciones"));
+            const asociacionesList = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            setAsociaciones(asociacionesList);
+        };
+
+        fetchAsociaciones();
+    }, []);
 
     useEffect(() => {
         const fetchTransportistas = async () => {
@@ -82,7 +95,7 @@ const ServiceScreen = () => {
         }
 
         try {
-            await addDoc(collection(db, "Transportistas"), {
+            const docRef = await addDoc(collection(db, "Transportistas"), {
                 nombre,
                 email,
                 telefono,
@@ -90,11 +103,30 @@ const ServiceScreen = () => {
                 region,
                 imageUrl
             });
+
+            const newTransportista = {
+                id: docRef.id,
+                nombre,
+                email,
+                telefono,
+                tipoTransporte,
+                region,
+                imageUrl
+            };
+
+            setTransportistas([...transportistas, newTransportista]);
+            setFilteredTransportistas([...filteredTransportistas, newTransportista]);
+
             handleClose();
-            window.location.reload();
         } catch (error) {
             console.error("Error adding document: ", error);
         }
+    };
+
+    const handleAsociacionClick = (asociacion) => {
+        setSelectedAsociacion(asociacion);
+        const filtered = transportistas.filter(transportista => asociacion.transportistas.includes(transportista.id));
+        setFilteredTransportistas(filtered);
     };
 
     const isAuthorized = currentUser && (currentUser.email === 'rangel.crlos@gmail.com' || currentUser.email === 'gustavo.webplatform@gmail.com');
@@ -195,19 +227,35 @@ const ServiceScreen = () => {
 
             <div className="container-fluid pt-5">
                 <div className="container">
-                    <div className="row">
-                        {filteredTransportistas.map((transportista) => (
-                            <TeamCardComponent 
-                                key={transportista.id}
-                                nombre={transportista.nombre}
-                                zona={transportista.region}
-                                imgSrc={transportista.imageUrl || ''}
-                                facebookUrl={transportista.facebookUrl}
-                                telefono={transportista.telefono}
-                                email={transportista.email}
-                            />
-                        ))}
+                    <div className="row card-container">
+                        {!selectedAsociacion ? (
+                            asociaciones.map((asociacion) => (
+                                <div key={asociacion.id} className="col-lg-3 col-md-6 mb-4" onClick={() => handleAsociacionClick(asociacion)}>
+                                    <div className="card border-0 shadow">
+                                        <div className="card-body text-center">
+                                            <h5 className="card-title">{asociacion.nombre}</h5>
+                                            <p className="card-text">{asociacion.descripcion}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))
+                        ) : (
+                            filteredTransportistas.map((transportista) => (
+                                <TeamCardComponent
+                                    key={transportista.id}
+                                    nombre={transportista.nombre}
+                                    zona={transportista.region}
+                                    imgSrc={transportista.imageUrl}
+                                    email={transportista.email}
+                                />
+                            ))
+                        )}
                     </div>
+                    {selectedAsociacion && (
+                        <Button variant="secondary" onClick={() => setSelectedAsociacion(null)}>
+                            Volver a las asociaciones
+                        </Button>
+                    )}
                 </div>
             </div>
         </div>

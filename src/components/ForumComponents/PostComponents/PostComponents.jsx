@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { collection, addDoc, query, getDocs } from 'firebase/firestore';
+import { collection, addDoc, query, getDocs, updateDoc, deleteDoc, doc } from 'firebase/firestore';
 import { db } from '../../../../backend/firebaseconfig';
 import DeletePostModal from './DeletePostModal/DeletePostModal';
 import EditPostModal from './EditPostModal/EditPostModal';
+import { Dropdown } from 'react-bootstrap';
+import { CSSTransition } from 'react-transition-group';
+
 
 const Post = ({ id, title, body, imageUrl, createdAt, author, zone, currentUser, onDelete, onEdit }) => {
   const [showFullBody, setShowFullBody] = useState(false);
@@ -13,6 +16,9 @@ const Post = ({ id, title, body, imageUrl, createdAt, author, zone, currentUser,
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [postToEdit, setPostToEdit] = useState(null);
+  const [commentToEdit, setCommentToEdit] = useState(null);
+  const [showEditCommentModal, setShowEditCommentModal] = useState(false);
+  const [newCommentText, setNewCommentText] = useState('');
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -37,20 +43,44 @@ const Post = ({ id, title, body, imageUrl, createdAt, author, zone, currentUser,
     }
   };
 
+  const handleEditComment = async () => {
+    if (newCommentText.trim() && commentToEdit) {
+      const commentRef = doc(db, 'posts', id, 'comments', commentToEdit.id);
+      await updateDoc(commentRef, { text: newCommentText });
+      setComments(comments.map(c => (c.id === commentToEdit.id ? { ...c, text: newCommentText } : c)));
+      setNewCommentText('');
+      setCommentToEdit(null);
+      setShowEditCommentModal(false);
+    }
+  };
+
+  const handleDeleteComment = async (commentId) => {
+    await deleteDoc(doc(db, 'posts', id, 'comments', commentId));
+    setComments(comments.filter(c => c.id !== commentId));
+  };
+
   const date = new Date(createdAt.seconds * 1000);
   const day = date.getDate();
   const month = date.toLocaleString('default', { month: 'short' });
 
   const isAuthor = currentUser && currentUser.email === author;
 
-  const handleDownloadImage = () => {
+  const handleDownloadImage = async () => {
     if (imageUrl) {
-      const link = document.createElement('a');
-      link.href = imageUrl;
-      link.download = title;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      try {
+        const response = await fetch(imageUrl);
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = title || 'imagen'; // Usa un nombre por defecto si el título no está disponible
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.URL.revokeObjectURL(url); // Limpia el objeto URL
+      } catch (error) {
+        console.error('Error al descargar la imagen:', error);
+      }
     }
   };
 
@@ -99,16 +129,23 @@ const Post = ({ id, title, body, imageUrl, createdAt, author, zone, currentUser,
               <button className="btn btn-secondary dropdown-toggle" type="button" id="menuButton" data-bs-toggle="dropdown" aria-expanded="false">
                 Opciones
               </button>
-              <ul className="dropdown-menu" aria-labelledby="menuButton">
-                {imageUrl && <li><button className="dropdown-item" onClick={handleDownloadImage}>Descargar Imagen</button></li>}
-                <li><button className="dropdown-item" onClick={handleShare}>Compartir</button></li>
-                {isAuthor && (
-                  <>
-                    <li><button className="dropdown-item" onClick={handleEdit}>Editar</button></li>
-                    <li><button className="dropdown-item" onClick={handleDelete}>Eliminar</button></li>
-                  </>
-                )}
-              </ul>
+              <CSSTransition
+                in={true}
+                timeout={300}
+                classNames="fade"
+                unmountOnExit
+              >
+                <ul className="dropdown-menu dropdown-menu-up" aria-labelledby="menuButton">
+                  {imageUrl && <li><button className="dropdown-item" onClick={handleDownloadImage}>Descargar Imagen</button></li>}
+                  <li><button className="dropdown-item" onClick={handleShare}>Compartir</button></li>
+                  {isAuthor && (
+                    <>
+                      <li><button className="dropdown-item" onClick={handleEdit}>Editar</button></li>
+                      <li><button className="dropdown-item" onClick={handleDelete}>Eliminar</button></li>
+                    </>
+                  )}
+                </ul>
+              </CSSTransition>
             </div>
           </div>
         </div>
@@ -132,9 +169,37 @@ const Post = ({ id, title, body, imageUrl, createdAt, author, zone, currentUser,
           </button>
           {showComments && (
             <div className="mb-3">
-              {comments.map((comment, index) => (
-                <div key={index} className="bg-light p-2 mb-2 rounded">
+              {comments.map((comment) => (
+                <div key={comment.id} className="bg-light p-2 mb-2 rounded position-relative">
                   <p className="mb-0"><strong>{comment.author}</strong>: {comment.text}</p>
+                  {currentUser.email === comment.author && (
+                    <div className="position-absolute top-50 end-0 translate-middle-y">
+                      <Dropdown>
+                        <Dropdown.Toggle variant="link" id={`dropdown-basic-${comment.id}`} className="text-dark">
+                          <i className="fas fa-ellipsis-v"></i>
+                        </Dropdown.Toggle>
+                        <CSSTransition
+                          in={true}
+                          timeout={300}
+                          classNames="fade"
+                          unmountOnExit
+                        >
+                          <Dropdown.Menu className="dropdown-menu-up" style={{ zIndex: 1050 }}>
+                            <Dropdown.Item onClick={() => {
+                              setCommentToEdit(comment);
+                              setNewCommentText(comment.text);
+                              setShowEditCommentModal(true);
+                            }}>
+                              Editar
+                            </Dropdown.Item>
+                            <Dropdown.Item onClick={() => handleDeleteComment(comment.id)}>
+                              Eliminar
+                            </Dropdown.Item>
+                          </Dropdown.Menu>
+                        </CSSTransition>
+                      </Dropdown>
+                    </div>
+                  )}
                 </div>
               ))}
               {currentUser && (
@@ -142,7 +207,7 @@ const Post = ({ id, title, body, imageUrl, createdAt, author, zone, currentUser,
                   <button
                     onClick={() => setShowCommentInput(!showCommentInput)}
                     className="btn btn-primary mb-3"
-                    style={{ borderRadius: '20px', padding: '0.25rem 1rem', position: 'relative', float: 'right' }}
+                    style={{ borderRadius: '20px', padding: '0.35rem 1rem', position: 'relative', float: 'right' }}
                   >
                     {showCommentInput ? 'Cancelar' : 'Agregar comentario'}
                   </button>
@@ -158,7 +223,7 @@ const Post = ({ id, title, body, imageUrl, createdAt, author, zone, currentUser,
                       <button
                         onClick={handleAddComment}
                         className="btn btn-primary"
-                        style={{ borderRadius: '20px', padding: '0.25rem 1rem' }}
+                        style={{ borderRadius: '20px', padding: '0.20rem 1rem' }}
                       >
                         Comentar
                       </button>
@@ -179,7 +244,6 @@ const Post = ({ id, title, body, imageUrl, createdAt, author, zone, currentUser,
           }}
         />
       )}
-
       {showEditModal && (
         <EditPostModal
           onClose={() => setShowEditModal(false)}
@@ -189,6 +253,30 @@ const Post = ({ id, title, body, imageUrl, createdAt, author, zone, currentUser,
             setShowEditModal(false);
           }}
         />
+      )}
+      {showEditCommentModal && (
+        <div className="modal show fade" style={{ display: 'block' }}>
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Editar Comentario</h5>
+                <button type="button" className="btn-close" onClick={() => setShowEditCommentModal(false)}></button>
+              </div>
+              <div className="modal-body">
+                <input
+                  type="text"
+                  className="form-control"
+                  value={newCommentText}
+                  onChange={(e) => setNewCommentText(e.target.value)}
+                />
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-secondary" onClick={() => setShowEditCommentModal(false)}>Cancelar</button>
+                <button type="button" className="btn btn-primary" onClick={handleEditComment}>Guardar</button>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

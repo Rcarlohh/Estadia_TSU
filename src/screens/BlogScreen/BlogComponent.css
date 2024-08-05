@@ -1,0 +1,162 @@
+body {
+  background-color: #f8f9fa;
+  color: #333;
+}
+
+.header {
+  background: url('./../../../src/assets/fondo.jpeg') no-repeat center center/cover;
+  color: #fff;
+  padding: 60px 0;
+  text-align: center;
+  position: relative;
+}
+
+.header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+}
+
+.header h1 {
+  position: relative;
+  font-size: 3.5rem;
+  z-index: 1;
+}
+
+.header p {
+  position: relative;
+  z-index: 1;
+}
+
+.card {
+  border-radius: 15px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.card-title {
+  color: #d93012;
+}
+
+.btn-primary {
+  background-color: #d93012;
+  border-color: #d93012;
+}
+
+.expanded-card {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 1050;
+  overflow: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 0.5s, transform 0.5s, box-shadow 0.5s;
+}
+
+.expanded-card.show {
+  opacity: 1;
+  transform: scale(1);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+}
+
+.expanded-card .card {
+  width: 80%;
+  max-width: 800px;
+  max-height: 80vh;
+  overflow-y: auto;
+  transform: none;
+  box-shadow: none;
+}
+
+.fade-enter {
+  opacity: 0;
+}
+
+.fade-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+
+.fade-exit {
+  opacity: 1;
+}
+
+.fade-exit-active {
+  opacity: 0;
+  transition: opacity 500ms ease-in;
+}
+
+/* Estilos de la galería */
+.gallery img {
+  height: 400px;
+  object-fit: cover;
+}
+
+/* Estilos de los delegados */
+.delegates .card {
+  transition: transform 0.3s, box-shadow 0.3s;
+  margin-bottom: 15px; /* Espacio entre las tarjetas */
+}
+
+.delegates .card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.delegates .card-img-top {
+  height: 150px; /* Ajusta la altura de la imagen para que las tarjetas sean más compactas */
+  object-fit: cover; /* Mantiene la imagen dentro del contenedor sin distorsión */
+}
+
+.delegates .card-body {
+  padding: 10px; /* Reduce el relleno interno para que las tarjetas sean más compactas */
+}
+
+.delegates .card-title {
+  font-size: 1.1rem; /* Ajusta el tamaño del título para que sea más compacto */
+  margin-bottom: 5px; /* Reduce el margen inferior del título */
+}
+
+.delegates .card-text {
+  font-size: 0.9rem; /* Ajusta el tamaño del texto para que sea más compacto */
+  margin-bottom: 5px; /* Reduce el margen inferior del texto */
+}
+
+
+/* Estilos del botón Leer más */
+.expanded-card .card-body .btn {
+  background: #0062E6;
+  border: none;
+  color: white;
+  transition: background 0.3s;
+}
+
+.expanded-card .card-body .btn:hover {
+  background: #004a99;
+}
+
+/* Estilos para la animación de las tarjetas */
+.events .card {
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.events .card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}

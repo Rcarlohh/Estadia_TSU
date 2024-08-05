@@ -57,9 +57,9 @@ const LoginModalComponent = ({ isOpen, onClose }) => {
                   Inicia sesión para acceder a todas las publicaciones del foro y formar parte de la conversación.
                 </p>
                 <br/>
-                <button className="btn btn-secondary btn-block fa-lg gradient-custom-2 mb-3" type="button" onClick={handleGoogleLogin}>
+                <button className="btn btn-secondary btn-block fa-lg gradient-custom-3 mb-3" type="button" onClick={handleGoogleLogin}>
                   <FontAwesomeIcon icon={faGoogle} className="mr-2" />
-                  Continuar con Google
+                     Continuar con Google
                 </button>
               </div>
             </div>

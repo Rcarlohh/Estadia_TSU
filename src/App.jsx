@@ -9,6 +9,7 @@ import ContactScreen from './screens/ContactScreen.jsx';
 import LoginModalComponent from './components/ForumComponents/LoginModalComponent/LoginModalComponent.jsx'; 
 import ProfileScreen from './screens/ProfileScreen/ProfileScreen.jsx';
 import SettingsScreen from './screens/SettingsScreen/SettingsScreen.jsx';
+import BlogScrenn from './screens/BlogScreen/BlogScreen.jsx';
 import { UserContext } from '../backend/config/UserContext.jsx'; 
 
 
@@ -28,6 +29,8 @@ function App() {
         {/* Rutas que no usan el layout */}
         <Route path="/Profile" element={<ProfileScreen />} />
         <Route path="/Settings" element={<SettingsScreen />} />
+        <Route path="/Blog" element={<BlogScrenn />} />
+        <Route path="/Blog/:eventId" element={<BlogScrenn />} />
       </Routes>
       {!user && <LoginModalComponent />}
     </Router>

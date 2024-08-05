@@ -2,6 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const AboutComponent = ({ imageSrc, title, subtitle, description, videoSrc }) => {
+  const handleVideoClick = () => {
+    if (videoSrc) {
+      window.open(videoSrc, '_blank');
+    }
+  };
+
   return (
     <div className="container-fluid py-5">
       <div className="container">
@@ -18,7 +24,11 @@ const AboutComponent = ({ imageSrc, title, subtitle, description, videoSrc }) =>
             <p className="mb-4">{description}</p>
             {videoSrc && (
               <div className="d-flex align-items-center pt-2">
-                <button type="button" className="btn-play" data-toggle="modal" data-src={videoSrc} data-target="#videoModal">
+                <button
+                  type="button"
+                  className="btn-play"
+                  onClick={handleVideoClick}
+                >
                   <span></span>
                 </button>
                 <h5 className="font-weight-bold m-0 ml-4">Ver Video</h5>
@@ -29,7 +39,7 @@ const AboutComponent = ({ imageSrc, title, subtitle, description, videoSrc }) =>
       </div>
     </div>
   );
-}
+};
 
 AboutComponent.propTypes = {
   imageSrc: PropTypes.string.isRequired,
@@ -40,4 +50,3 @@ AboutComponent.propTypes = {
 };
 
 export default AboutComponent;
-

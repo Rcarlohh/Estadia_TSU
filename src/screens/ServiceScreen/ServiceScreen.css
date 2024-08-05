@@ -1,0 +1,31 @@
+.card {
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 0 auto;
+    max-width: 280px; /* Ajusta el ancho de las tarjetas */
+}
+
+.card-body {
+    padding: 15px;
+}
+
+.card-title {
+    font-size: 1.25rem; /* Tamaño del texto del título */
+    margin-bottom: 10px;
+}
+
+.card-text {
+    font-size: 0.875rem; /* Tamaño del texto de la descripción */
+    color: #666; /* Color del texto */
+}
+
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem; /* Espacio entre las tarjetas */
+    justify-content: center;
+}
+
+.card-container .col-lg-3, .card-container .col-md-6 {
+    flex: 1 1 auto;
+}

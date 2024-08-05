@@ -8,6 +8,7 @@ import ContacComponents from '../components/ContacComponents';
 import ServiceComponents from '../components/ServiceComponents;';
 import ProfileComponent from '../screens/ProfileScreen';
 import SettingsScreen from "../screens/SettingsScreen/SettingsScreen";
+import BlogScrenn from "../screens/BlogScreen/BlogScreen";
 
 const AppRoute = () => {
     <Router>
@@ -19,6 +20,7 @@ const AppRoute = () => {
             <Route path="/Service" exact Component={ServiceComponents}/>
             <Route path="/Profile" exact Component={ProfileComponent}/>
             <Route path="/Settings" exact Component={SettingsScreen}/>
+            <Route path="/Blog" exact Component={BlogScrenn}/>
         </switch>
     </Router>
 };

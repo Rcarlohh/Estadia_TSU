@@ -1,12 +1,13 @@
 import React from 'react';
+import './PostCss/SearchComponent.css'
 
-const RecentPost = ({ post, onClick }) => (
-  <div className="d-flex mb-3 recent-post" onClick={() => onClick(post)}>
-    <img className="img-fluid" src={post.imageUrl} style={{ width: '80px', height: '80px', objectFit: 'cover' }} alt={post.title} />
-    <a href="#" className="d-flex align-items-center bg-secondary text-dark text-decoration-none px-3" style={{ height: '80px' }}>
-      {post.title}
-    </a>
-  </div>
-);
+const RecentPost = ({ post, onClick }) => {
+  return (
+    <div className="recent-post" onClick={() => onClick(post)}>
+      {post.imageUrl && <img src={post.imageUrl} alt={post.title} className="recent-post-image" />}
+      <h6 className="recent-post-title">{post.title}</h6>
+    </div>
+  );
+};
 
 export default RecentPost;

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { updateDoc, doc } from 'firebase/firestore';
-import { db, uploadImage } from '../../../../../backend/firebaseconfig';  // Importar la función uploadImage
+import { db, uploadImage } from '../../../../../backend/firebaseconfig';
+import './EditPostModal.css'
 
 const EditPostModal = ({ onClose, post, onSave }) => {
   const [title, setTitle] = useState(post.title);

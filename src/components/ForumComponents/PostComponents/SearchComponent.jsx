@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Post from './PostComponents.jsx';
 import PostPlaceholder from './PostCss/PostPlaceholder.jsx';
 import RecentPost from './RecentPost.jsx';
-import { getFirestore, collection, onSnapshot, query, orderBy, getDocs } from 'firebase/firestore';
+import DeletePostModal from './DeletePostModal/DeletePostModal.jsx';
+import { getFirestore, collection, onSnapshot, query, orderBy, getDocs, doc, deleteDoc } from 'firebase/firestore';
 import { getCurrentUser } from '../../../../backend/firebaseconfig.js';
 import './PostCss/SearchComponent.css';
 
@@ -16,6 +17,8 @@ const SearchComponent = () => {
   const [comments, setComments] = useState([]);
   const [selectedZone, setSelectedZone] = useState('');
   const [zones, setZones] = useState([]);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [postToDelete, setPostToDelete] = useState(null);
   const db = getFirestore();
 
   useEffect(() => {
@@ -33,7 +36,6 @@ const SearchComponent = () => {
       setRecentPosts(postsData.slice(0, 5));
       setLoading(false);
 
-      // Obtener zonas únicas
       const uniqueZones = [...new Set(postsData.map(post => post.zone))];
       setZones(uniqueZones);
     });
@@ -46,7 +48,24 @@ const SearchComponent = () => {
   };
 
   const handleDeletePost = (postId) => {
-    console.log(`Eliminar post con ID: ${postId}`);
+    setPostToDelete(postId);
+    setShowDeleteModal(true);
+  };
+
+  const confirmDeletePost = async () => {
+    try {
+      // Esperar a que la eliminación se complete
+      await deleteDoc(doc(db, 'posts', postToDelete));
+      // Actualizar el estado después de la eliminación
+      setPosts(posts.filter(post => post.id !== postToDelete));
+      setRecentPosts(recentPosts.filter(post => post.id !== postToDelete));
+    } catch (error) {
+      console.error('Error eliminando el post:', error);
+    } finally {
+      // Cerrar el modal solo después de la eliminación
+      setShowDeleteModal(false);
+      setPostToDelete(null); // Limpiar el ID del post a eliminar
+    }
   };
 
   const handleEditPost = (postId, updatedPost) => {
@@ -90,6 +109,12 @@ const SearchComponent = () => {
 
   return (
     <div className={`container py-5 ${activeRecentPost ? 'dark-background' : ''}`}>
+      {showDeleteModal && (
+        <DeletePostModal
+          onClose={() => setShowDeleteModal(false)}
+          onDelete={confirmDeletePost}
+        />
+      )}
       {activeRecentPost && (
         <div className="active-recent-post-container" style={styles.activeRecentPostContainer}>
           <div className="active-recent-post" style={styles.activeRecentPost}>
@@ -103,7 +128,7 @@ const SearchComponent = () => {
                 author={activeRecentPost.author}
                 zone={activeRecentPost.zone}
                 currentUser={currentUser}
-                onDelete={handleDeletePost}
+                onDelete={() => handleDeletePost(activeRecentPost.id)}
                 onEdit={handleEditPost}
                 fromRecentPosts={true}
               />
@@ -154,7 +179,7 @@ const SearchComponent = () => {
                 author={post.author}
                 zone={post.zone}
                 currentUser={currentUser}
-                onDelete={handleDeletePost}
+                onDelete={() => handleDeletePost(post.id)}
                 onEdit={handleEditPost}
               />
             ))
@@ -209,7 +234,7 @@ const SearchComponent = () => {
             </div>
             {selectedZone && (
               <button 
-                className="btn btn-secondary m-1" 
+                className="btn btn-primary m-1" 
                 onClick={handleClearFilters}
               >
                 Quitar Filtros

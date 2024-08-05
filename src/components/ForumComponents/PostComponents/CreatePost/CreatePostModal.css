@@ -1,16 +1,30 @@
 .create-post-modal {
-  background-color: #fff;
-  border-radius: 15px;
-  padding: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  max-width: 400px;
-  margin: 0 auto;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  padding: 30px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  margin: 50px auto;
+  position: relative;
+  font-family: 'Arial', sans-serif;
 }
 
 .create-post-modal h2 {
   text-align: center;
   color: #d93012;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
+  font-size: 24px;
+}
+
+.create-post-modal .close-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #d93012;
 }
 
 .form-horizontal {
@@ -20,39 +34,41 @@
 
 .form-horizontal .form-group {
   margin-bottom: 20px;
-  display: flex;
-  flex-direction: column;
 }
 
 .form-horizontal label {
-  margin-bottom: 5px;
-  color: #555;
+  margin-bottom: 8px;
+  color: #333;
+  font-weight: bold;
 }
 
 .form-horizontal input,
-.form-horizontal textarea {
+.form-horizontal textarea,
+.form-horizontal select {
   width: 100%;
-  padding: 10px;
-  border-radius: 10px;
+  padding: 12px;
+  border-radius: 5px;
   border: 1px solid #ddd;
   box-sizing: border-box;
+  font-size: 16px;
 }
 
 .form-horizontal textarea {
   resize: vertical;
-  height: 100px;
+  height: 120px;
 }
 
 .btn-submit {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   background-color: #d93012;
   color: #fff;
   border: none;
-  border-radius: 20px;
-  font-size: 16px;
+  border-radius: 5px;
+  font-size: 18px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  margin-top: 20px;
 }
 
 .btn-submit:disabled {
@@ -60,5 +76,25 @@
 }
 
 .btn-submit:hover:enabled {
-  background-color: #2c6aa5;
+  background-color: #a52c2c;
+}
+
+.quick-messages {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.btn-quick-message {
+  margin: 5px;
+  padding: 5px 10px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn-quick-message:hover {
+  background-color: #e0e0e0;
 }

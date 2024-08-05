@@ -72,10 +72,10 @@ const Navbar = () => {
           </div>
           <div className="col-lg-6 text-center text-lg-right">
             <div className="d-inline-flex align-items-center">
-              <a className="text-white px-2" href="https://facebook.com">
+              <a className="text-white px-2" href="https://www.facebook.com/AmotacOficial">
                 <FontAwesomeIcon icon={faFacebookF} />
               </a>
-              <a className="text-white px-2" href="https://twitter.com">
+              <a className="text-white px-2" href="https://x.com/Amotac">
                 <FontAwesomeIcon icon={faTwitter} />
               </a>
             </div>
