@@ -10,7 +10,7 @@ const ContactScreen = () => {
          subtitle1="Pasión por el transporte"
          subtitle2="Excelencia en el servicio"
         />
-     <ContactComponent/>
+        <ContactComponent/>
       
     </div>
   );

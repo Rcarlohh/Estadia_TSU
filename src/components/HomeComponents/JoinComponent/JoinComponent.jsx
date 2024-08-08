@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import emailjs from 'emailjs-com';
 import { Alert } from 'react-bootstrap'; // Importar Alert de react-bootstrap
 
 const JoinComponent = () => {
@@ -23,31 +22,27 @@ const JoinComponent = () => {
         });
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
 
-        const USER_ID = 'V_Ks9rQsra9FFD6_i';
-        const SERVICE_ID = 'service_of6qa3s';
-        const TEMPLATE_ID = 'template_2ln3pz5';
+        try {
+            const response = await fetch('http://localhost:1701/send-form', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formState),
+            });
 
-        emailjs.send(SERVICE_ID, TEMPLATE_ID, {
-            nombre: formState.nombre,
-            cargo: formState.cargo,
-            asociacion: formState.asociacion,
-            telefono: formState.telefono,
-            email: formState.email,
-            ciudad: formState.ciudad,
-            motivo: formState.motivo,
-            servicio: formState.servicio
-        }, USER_ID)
-        .then((response) => {
-            console.log('SUCCESS!', response.status, response.text);
-            setSubmitStatus('success');
-        })
-        .catch((error) => {
-            console.log('FAILED...', error);
+            if (response.ok) {
+                setSubmitStatus('success');
+            } else {
+                setSubmitStatus('error');
+            }
+        } catch (error) {
+            console.error('Error al enviar el formulario:', error);
             setSubmitStatus('error');
-        });
+        }
 
         setFormState({
             nombre: '',

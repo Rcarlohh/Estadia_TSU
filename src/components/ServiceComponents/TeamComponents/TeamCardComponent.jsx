@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../../../../backend/firebaseconfig';
-import emailjs from 'emailjs-com';
 import './TeamCardComponent.css';
-
-emailjs.init("V_Ks9rQsra9FFD6_i");
 
 const TeamCardComponent = ({ nombre, zona, imgSrc, email }) => {
     const [telefono, setPhoneNumber] = useState('');
@@ -31,24 +28,28 @@ const TeamCardComponent = ({ nombre, zona, imgSrc, email }) => {
         alert(`El número del transportista es: ${telefono}`);
     };
 
-    const handleSendEmail = async (e) => {
-        e.preventDefault();
-        const formData = new FormData();
-        formData.append('message', message);
-        formData.append('to_email', email);
-        if (image) {
-            formData.append('image', image, image.name);
-        }
-
+    const handleSendEmail = async () => {
         try {
-            await emailjs.send('service_of6qa3s', 'template_7y9bteu', formData, { contentType: false });
-            setShowModal(false);
-            alert('Correo enviado!');
+          const response = await fetch('http://localhost:1701/send-email-contact', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ name, email, message }),
+          });
+      
+          const data = await response.json();
+      
+          if (response.ok) {
+            console.log('Email sent successfully:', data.message);
+          } else {
+            console.error('Error sending email:', data.error);
+          }
         } catch (error) {
-            console.error("Error sending email: ", error);
-            alert('Error al enviar el correo. Por favor, inténtalo de nuevo más tarde.');
+          console.error('Network error:', error);
         }
-    };
+      };
+      
 
     return (
         <div className="col-lg-4 col-md-6">
